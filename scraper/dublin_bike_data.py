@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.schemas import Base, DublinBike
-from config import MySQL, APIKeys
+from config.config import MySQL, APIKeys
 from scraper import current_weather_scraper
 import pytz
 

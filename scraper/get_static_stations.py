@@ -3,7 +3,7 @@ from time import time
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.schemas import Base, StaticBike
-from config import MySQL
+from config.config import MySQL
 
 #Build static bike station id table
 if __name__ == "__main__":

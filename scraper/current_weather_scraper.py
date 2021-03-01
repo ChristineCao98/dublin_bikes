@@ -3,7 +3,7 @@ import datetime
 from sqlalchemy import create_engine, exists
 from sqlalchemy.orm import sessionmaker
 from models.schemas import Base, CurrentWeather, StaticBike
-from config import MySQL, APIKeys
+from config.config import MySQL, APIKeys
 
 
 def scrape(dt):
