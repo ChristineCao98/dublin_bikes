@@ -1,3 +1,4 @@
 
 *.pyc
 .idea/
+dublin_bike.egg-info/
