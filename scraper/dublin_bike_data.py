@@ -9,7 +9,6 @@ import pytz
 
 '''Call the scraper and save the data in the DB'''
 def scrape():
-    print("In bike scraper!")
     engine = create_engine(MySQL.URI)
     Base.metadata.create_all(engine)  # Create table
     Session = sessionmaker(bind=engine)
@@ -22,6 +21,9 @@ def scrape():
 
     response.raise_for_status()  # throw an error if made a bad request
 
+    print("Bike Request=", response.request.url)
+    print("Bike Response=", response.content)
+
     if response:
         response = response.json()
         utc_now = datetime.utcnow()
@@ -32,7 +34,10 @@ def scrape():
         for row in response:
             scraping_time = dt
             number = row["number"]
-            last_update = datetime.fromtimestamp(row["last_update"] / 1000)
+            if row["last_update"]:
+                last_update = datetime.fromtimestamp(row["last_update"] / 1000)
+            else:
+                last_update = None
             site_names = row["name"]
             address = row["address"]
             latitude = row["position"]['lat']
