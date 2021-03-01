@@ -7,7 +7,7 @@ setup(name="dublin-bike",
       author="AY",
       author_email="",
       licence="GPL3",
-      packages=['scraper', 'models'],
+      packages=['scraper', 'models', 'config'],
       entry_points={
         'console_scripts':['bike_scraper=scraper.scheduler:main']
         }
