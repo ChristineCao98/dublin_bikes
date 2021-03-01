@@ -3,8 +3,13 @@ import time
 
 def main():
     while True:
-        stations = dublin_bike_data.scrape()
-        time.sleep(5 * 60)
-
+        try:
+            print("Start Scraping...")
+            stations = dublin_bike_data.scrape()
+            print("End of Scraping...")
+            time.sleep(5 * 60)
+        except Exception as e:
+            print("Error: " + str(e))
+    print("End of scheduler")
 main()
 

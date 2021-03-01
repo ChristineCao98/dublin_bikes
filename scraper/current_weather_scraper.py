@@ -29,9 +29,14 @@ def scrape(dt):
             response = requests.get(url)
             response.raise_for_status()
 
+            print("Bike Request=", response.request.url)
+            print("Bike Response=", response.content)
+
             if response:
                 data = response.json()
+                weather = data["weather"][0]
                 temp = data["main"]["temp"]
+                icon = weather["icon"]
                 lon = data["coord"]["lon"]
                 lat = data["coord"]["lat"]
                 wind_spd = data["wind"]["speed"]
@@ -40,10 +45,7 @@ def scrape(dt):
                 sunrise = data["sys"]["sunrise"]
                 pressure = data["main"]["pressure"]
                 humidity = data["main"]["humidity"]
-                weather = data["weather"][0]
-                icon = weather["icon"]
                 code = weather["id"]
-                description = weather["description"]
 
                 dtObj = datetime.datetime.strptime(dt, '%Y-%m-%d %H:%M:%S')
                 weekday = dtObj.isoweekday()
