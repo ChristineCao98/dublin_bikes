@@ -1,9 +1,10 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, url_for
 from models.schemas import DublinBike
 from flask_sqlalchemy import SQLAlchemy
 from flask_caching import Cache
 from sqlalchemy import func
-from config.config import MySQL
+from config.config import MySQL, APIKeys
+from time import time
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = MySQL.URI
@@ -13,6 +14,12 @@ app.config['CACHE_DEFAULT_TIMEOUT'] = 300
 
 db = SQLAlchemy(app)
 cache = Cache(app)
+
+
+@app.route('/')
+@cache.cached()
+def index():
+    return render_template('index.html', map_api=APIKeys.map_API,time=time)
 
 
 @app.route('/api/stations/')
@@ -48,4 +55,4 @@ def get_station(station_id):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
