@@ -12,11 +12,18 @@
     <title>dublin bikes map</title>
 </head>
 <body>
+<div id="header">
+<div id="logo">
+      <img src="static/DB_LOGO.png" alt="logo">
+        </div>
+        <h1> Dublin Bikes </h1>
+</div>
+
 <div  id="map">
 
 </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script src="{{ url_for('static',filename='index.js') }}?t={{time()}}"></script>{# time is only for developement stage #}
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFP5d_7EMWgLSyTTuCvpYcUU--AQ239So&callback=initMap&libraries=&v=weekly" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCANABu72KvlpGz_bxRcXGa5rM_HNgdeaA&callback=initMap&libraries=&v=weekly" async defer></script>
 </body>
 </html>

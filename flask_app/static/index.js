@@ -5,6 +5,43 @@ function initMap (){
     zoom: 14,
     center: myLatLng,
   });
+
+  //Display Cycle Routes on Map
+  const bikeLayer = new google.maps.BicyclingLayer();
+    bikeLayer.setMap(map);
+
+  //Geolocation Feature on Map
+  let geolocation = new google.maps.InfoWindow();
+  const locationButton = document.createElement("button");
+  locationButton.textContent = "Pan to Current Location";
+  locationButton.classList.add("custom-map-control-button");
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+
+  locationButton.addEventListener("click", () => {
+    // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          geolocation.setPosition(pos);
+          geolocation.setContent("You are here!");
+          geolocation.open(map);
+          map.setCenter(pos);
+        },
+        () => {
+          handleLocationError(true, geolocation, map.getCenter());
+        }
+      );
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, geolocation, map.getCenter());
+    }
+  });
+
+  //Display Markers on Map
   axios.get('/api/stations/').then(response=>{
     var stations=response.data.data;
     stations.forEach(station=>{
@@ -40,4 +77,14 @@ function getColor(num){
   else{
     return "#0F0"
   }
+}
+
+function handleLocationError(browserHasGeolocation, geolocation, pos) {
+  geolocation.setPosition(pos);
+  geolocation.setContent(
+    browserHasGeolocation
+      ? "Error: The Geolocation service failed."
+      : "Error: Your browser doesn't support geolocation."
+  );
+  geolocation.open(map);
 }

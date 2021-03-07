@@ -1,6 +1,43 @@
 #map{
-    height: 100%;
+    position: absolute;
+    top: 40px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
 }
 html,body{
     height: 100%;
+}
+.custom-map-control-button {
+  appearance: button;
+  background-color: #fff;
+  border: 0;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  margin: 10px;
+  padding: 0 0.5em;
+  height: 40px;
+  font: 400 18px Roboto, Arial, sans-serif;
+  overflow: hidden;
+}
+.custom-map-control-button:hover {
+  background: #ebebeb;
+}
+
+#logo {
+    float: left;
+}
+
+#header {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height:auto;
+    background-color: #074b54;
+}
+h1 {
+    padding-left: 20px;
+    color: #5d878d;
 }
