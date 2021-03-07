@@ -8,10 +8,13 @@ function initMap (){
   axios.get('/api/stations/').then(response=>{
     var stations=response.data.data;
     stations.forEach(station=>{
+    var scale=getSize(station.available_bike);
+    var color=getColor(station.available_bike);
     var marker=new google.maps.Marker({
     position:{lat:station.latitude,lng: station.longitude},
     map:map,
-      icon:pinSymbol(getColor(station.available_bike))
+    // icon:pinSymbol(getColor(station.available_bike))
+        icon:`https://chart.apis.google.com/chart?chst=d_map_spin&chld=${scale}|0|${color}|11|_|${station.available_bike}`
   });
     marker.addListener("click",()=>{
     infowindow.setContent(station.number.toString());
@@ -22,22 +25,19 @@ function initMap (){
     console.log(error);
   });
 }
-
-function pinSymbol(color) {
-    return {
-        path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
-        fillColor: color,
-        fillOpacity: 1,
-        strokeColor: '#000',
-        strokeWeight: 2,
-        scale: 1,
-   };
+function getSize(num){
+    if(num>20){
+    return 0.75
+  }
+  else{
+    return 0.5
+  }
 }
 function getColor(num){
   if(num>20){
-    return "#F00"
+    return "F00000"
   }
   else{
-    return "#0F0"
+    return "00FF00"
   }
 }
