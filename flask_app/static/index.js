@@ -1,3 +1,6 @@
+'use strict';//to enable the use of let
+
+var markerMap=new Map();
 function initMap (){
   this.infowindow = new google.maps.InfoWindow();
   let myLatLng = {lat: 53.350140, lng: -6.266155};
@@ -16,6 +19,7 @@ function initMap (){
     // icon:pinSymbol(getColor(station.available_bike))
         icon:`https://chart.apis.google.com/chart?chst=d_map_spin&chld=${scale}|0|${color}|11|_|${station.available_bike}`
   });
+    markerMap.set(station.number,marker);
     marker.addListener("click",()=>{
     infowindow.setContent(station.number.toString());
     infowindow.open(map,marker);
