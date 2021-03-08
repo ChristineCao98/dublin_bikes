@@ -4,3 +4,7 @@
 html,body{
     height: 100%;
 }
+.btn-primary:active ,.btn-primary:focus{
+    background-color: white !important;
+    color: #0d6efd !important;
+}

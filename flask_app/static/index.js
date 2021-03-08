@@ -1,6 +1,7 @@
 'use strict';//to enable the use of let
 
 var markerMap=new Map();
+var stationInfo=new Map();
 function initMap (){
   this.infowindow = new google.maps.InfoWindow();
   let myLatLng = {lat: 53.350140, lng: -6.266155};
@@ -16,10 +17,10 @@ function initMap (){
     var marker=new google.maps.Marker({
     position:{lat:station.latitude,lng: station.longitude},
     map:map,
-    // icon:pinSymbol(getColor(station.available_bike))
-        icon:`https://chart.apis.google.com/chart?chst=d_map_spin&chld=${scale}|0|${color}|11|_|${station.available_bike}`
+    icon:`https://chart.apis.google.com/chart?chst=d_map_spin&chld=${scale}|0|${color}|11|_|${station.available_bike}`
   });
     markerMap.set(station.number,marker);
+    stationInfo.set(station.number,station);
     marker.addListener("click",()=>{
     infowindow.setContent(station.number.toString());
     infowindow.open(map,marker);
@@ -28,6 +29,15 @@ function initMap (){
   }).catch(error=>{
     console.log(error);
   });
+}
+function displayMarker(sign){
+    markerMap.forEach(function(value, key){
+        var station=stationInfo.get(key);
+        var num=sign==0?station.available_bike:station.available_bike_stand;
+        var scale=getSize(num);
+        var color=getColor(num);
+        value.setIcon(`https://chart.apis.google.com/chart?chst=d_map_spin&chld=${scale}|0|${color}|11|_|${num}`)
+    })
 }
 function getSize(num){
     if(num>20){
