@@ -2,7 +2,7 @@ from flask import Flask, render_template, jsonify, url_for
 from models.schemas import DublinBike
 from flask_sqlalchemy import SQLAlchemy
 from flask_caching import Cache
-from sqlalchemy import func
+from sqlalchemy import func,extract
 from config.config import MySQL, APIKeys
 from time import time
 
@@ -19,7 +19,7 @@ cache = Cache(app)
 @app.route('/')
 @cache.cached()
 def index():
-    return render_template('index.html', map_api=APIKeys.map_API,time=time)
+    return render_template('index.html', map_api=APIKeys.map_API, time=time)
 
 
 @app.route('/api/stations/')
@@ -52,6 +52,36 @@ def get_station(station_id):
     return jsonify({
         'data': station.serialize
     })
+
+
+@app.route('/api/hour/<int:station_id>')
+@cache.cached()
+def get_hourly(station_id):
+    hourdata=db.session.query(func.avg(DublinBike.available_bike)) \
+        .filter(DublinBike.number==station_id) \
+        .group_by(extract('hour', DublinBike.localtime)) \
+        .order_by(extract('hour', DublinBike.localtime)) \
+        .all()
+    return jsonify([
+        {'hour': i,
+         'available_bike': float(hourdata[i][0])
+         }for i in range(24)
+    ])
+
+
+@app.route('/api/day/<int:station_id>')
+@cache.cached()
+def get_daily(station_id):
+    dailydata = db.session.query(func.avg(DublinBike.available_bike)) \
+        .filter(DublinBike.number == station_id) \
+        .group_by(func.dayofweek(DublinBike.localtime)) \
+        .order_by(func.dayofweek(DublinBike.localtime)) \
+        .all()
+    return jsonify([
+        {'day': i,
+         'available_bike': float(dailydata[i][0])
+         }for i in range(7)
+    ])
 
 
 if __name__ == '__main__':

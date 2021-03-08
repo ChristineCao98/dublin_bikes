@@ -18,6 +18,7 @@ function initMap (){
   let geolocation = new google.maps.InfoWindow();
   const locationButton = document.createElement("button");
   locationButton.textContent = "Pan to Current Location";
+  locationButton.type="button";
   locationButton.classList.add("custom-map-control-button");
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
 
