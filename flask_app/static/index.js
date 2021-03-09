@@ -2,10 +2,12 @@
 
 var markerMap=new Map();
 var stationInfo=new Map();
+var infowindow;
+var map;
 function initMap (){
-  this.infowindow = new google.maps.InfoWindow();
+  infowindow = new google.maps.InfoWindow();
   let myLatLng = {lat: 53.350140, lng: -6.266155};
-  let map = new google.maps.Map(document.getElementById("map"), {
+  map = new google.maps.Map(document.getElementById("map"), {
     zoom: 14,
     center: myLatLng,
   });
@@ -59,14 +61,17 @@ function initMap (){
   });
     markerMap.set(station.number,marker);
     stationInfo.set(station.number,station);
-    marker.addListener("click",()=>{
-    infowindow.setContent(station.number.toString());
-    infowindow.open(map,marker);
-    });
+    marker.addListener("click",()=>clickEvent(station.number));
     });
   }).catch(error=>{
     console.log(error);
   });
+}
+function clickEvent(id){
+  var station=stationInfo.get(id);
+  var marker=markerMap.get(id);
+  infowindow.setContent(station.number.toString());
+  infowindow.open(map,marker);
 }
 function displayMarker(sign){
     markerMap.forEach(function(value, key){

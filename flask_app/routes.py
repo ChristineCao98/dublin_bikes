@@ -2,7 +2,7 @@ from flask import Flask, render_template, jsonify, url_for
 from models.schemas import DublinBike
 from flask_sqlalchemy import SQLAlchemy
 from flask_caching import Cache
-from sqlalchemy import func,extract
+from sqlalchemy import func, extract
 from config.config import MySQL, APIKeys
 from time import time
 
