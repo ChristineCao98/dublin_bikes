@@ -70,7 +70,17 @@ function initMap (){
 function clickEvent(id){
   var station=stationInfo.get(id);
   var marker=markerMap.get(id);
-  infowindow.setContent(station.number.toString());
+  var content=`
+  <h6>Basic information</h6>
+  <ul>
+  <li>Station No.${station.number}</li>
+  <li>Full address: ${station.address}</li>
+  <li>Available bikes: ${station.available_bike}</li>
+  <li>Free stands: ${station.available_bike_stand}</li>
+  <li>Total capacity: ${station.bike_stand}</li>
+</ul>
+  `;
+  infowindow.setContent(content);
   infowindow.open(map,marker);
 }
 function displayMarker(sign){
