@@ -63,29 +63,15 @@ def get_prediction(station_id):
 
     model = pickle.load(open('stand_prediction_model.pickle', "rb"))
 
-    data = {'latitude': [93],
-            'longitude': [93],
-            'temperature': [1.29],
-            'wind_spd': [1.94],
-            'pressure': [9],
-            'humidity': [9],
-            'hour': [9],
-            'weekday_Friday': [1],
-            'weekday_Monday': [0],
-            'weekday_Saturday': [0],
-            'weekday_Sunday': [0],
-            'weekday_Thursday': [0],
-            'weekday_Tuesday': [0],
-            'weekday_Wednesday': [0]
-            }
-    df = pd.DataFrame(data)
-    prediction_load = model.predict(df)
-    prediction_load[0]
-
-    helper.get_weather_forecast()
+    latitude, longitude = helper.get_station_coordinate(db, station_id)
+    weather_data = helper.get_weather_forecast()
+    input_x, slot_timestamps = helper.create_prediction_input(weather_data, latitude, longitude)
+    prediction = model.predict(input_x)
+    prediction_list = [int(i) for i in prediction.tolist()]
 
     return jsonify({
-        'data': prediction_load[0]
+        'timestamp': slot_timestamps,
+        'availability_prediction': prediction_list
     })
 
 
