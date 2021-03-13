@@ -61,7 +61,7 @@ def get_station(station_id):
 @cache.cached()
 def get_prediction(station_id):
 
-    model = pickle.load(open('stand_prediction_model.pickle', "rb"))
+    model = pickle.load(open('bike_prediction_model.pickle', "rb"))
 
     latitude, longitude = helper.get_station_coordinate(db, station_id)
     if latitude and longitude:
