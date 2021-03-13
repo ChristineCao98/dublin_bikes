@@ -29,8 +29,12 @@ def get_weather_forecast():
 
 def get_station_coordinate(db, station_num):
     station = db.session.query(StaticBike) \
-        .filter(StaticBike.number == station_num)
-    return station[0].latitude, station[0].longitude
+        .filter(StaticBike.number == station_num).first()
+
+    if station is None:
+        return None, None
+    else:
+        return station.latitude, station.longitude
 
 def create_prediction_input(weahter_data, latitude, longitude):
     rows = []
