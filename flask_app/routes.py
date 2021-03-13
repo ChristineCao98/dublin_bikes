@@ -5,6 +5,9 @@ from flask_caching import Cache
 from sqlalchemy import func
 from config.config import MySQL, APIKeys
 from time import time
+import pickle
+import pandas as pd
+import toolkits.prediction_helper as helper
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = MySQL.URI
@@ -52,6 +55,39 @@ def get_station(station_id):
     return jsonify({
         'data': station.serialize
     })
+
+
+@app.route('/api/prediction/<int:station_id>')
+@cache.cached()
+def get_prediction(station_id):
+
+    model = pickle.load(open('stand_prediction_model.pickle', "rb"))
+
+    data = {'latitude': [93],
+            'longitude': [93],
+            'temperature': [1.29],
+            'wind_spd': [1.94],
+            'pressure': [9],
+            'humidity': [9],
+            'hour': [9],
+            'weekday_Friday': [1],
+            'weekday_Monday': [0],
+            'weekday_Saturday': [0],
+            'weekday_Sunday': [0],
+            'weekday_Thursday': [0],
+            'weekday_Tuesday': [0],
+            'weekday_Wednesday': [0]
+            }
+    df = pd.DataFrame(data)
+    prediction_load = model.predict(df)
+    prediction_load[0]
+
+    helper.get_weather_forecast()
+
+    return jsonify({
+        'data': prediction_load[0]
+    })
+
 
 
 if __name__ == '__main__':
