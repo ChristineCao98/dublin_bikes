@@ -64,12 +64,12 @@ def get_prediction(station_id):
     model = pickle.load(open('stand_prediction_model.pickle', "rb"))
 
     latitude, longitude = helper.get_station_coordinate(db, station_id)
-    if latitude:
+    if latitude and longitude:
         weather_data = helper.get_weather_forecast()
         input_x, slot_timestamps = helper.create_prediction_input(weather_data, latitude, longitude)
         prediction = model.predict(input_x)
         prediction_list = [int(i) for i in prediction.tolist()]
-    
+
         return jsonify({
             'timestamp': slot_timestamps,
             'availability_prediction': prediction_list
