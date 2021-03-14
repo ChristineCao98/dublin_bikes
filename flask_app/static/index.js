@@ -1,10 +1,13 @@
 'use strict';//to enable the use of let
-
+google.charts.load('current', {'packages':['corechart']});
+google.charts.load('current', {'packages':['bar']});
 var markerMap=new Map();
 var stationInfo=new Map();
 var infowindow;
 var map;
+var weekday=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
 function initMap (){
+
   infowindow = new google.maps.InfoWindow();
   let myLatLng = {lat: 53.350140, lng: -6.266155};
   map = new google.maps.Map(document.getElementById("map"), {
@@ -68,6 +71,11 @@ function initMap (){
   });
 }
 function clickEvent(id){
+  showStatic(id);
+  showHourly(id);
+  showDaily(id);
+}
+function showStatic(id){
   var station=stationInfo.get(id);
   var marker=markerMap.get(id);
   var content=`
@@ -82,6 +90,56 @@ function clickEvent(id){
   `;
   infowindow.setContent(content);
   infowindow.open(map,marker);
+}
+function showHourly(id){
+  axios.get('/api/hour/'+id).then(response=>{
+    var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Hour of Day');
+      data.addColumn('number','average number');
+      response.data.forEach(hourlydata=>{
+        data.addRow([hourlydata.hour.toString(),hourlydata.available_bike]);
+      });
+      var options = {
+        title: 'Hourly availability data',
+        width:1100,
+        hAxis: {
+          title: 'Hour of day',
+          showTextEvery: 1
+        },
+        vAxis: {
+          title: 'average number'
+        }
+      };
+      var materialChart = new google.charts.Bar(document.getElementById('hourly-chart'));
+      materialChart.draw(data, options);
+  }).catch(error=>{
+    console.log(error);
+  });
+}
+function showDaily(id){
+  axios.get('/api/day/'+id).then(response=>{
+    var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Day of Week');
+      data.addColumn('number','average number');
+      response.data.forEach(dailydata=>{
+        data.addRow([weekday[dailydata.day],dailydata.available_bike]);
+      });
+      var options = {
+        title: 'Daily availability data',
+        width:1000,
+        hAxis: {
+          title: 'day of week',
+          showTextEvery: 1
+        },
+        vAxis: {
+          title: 'average number'
+        }
+      };
+      var materialChart = new google.charts.Bar(document.getElementById('daily-chart'));
+      materialChart.draw(data, options);
+  }).catch(error=>{
+    console.log(error);
+  });
 }
 function displayMarker(sign){
     markerMap.forEach(function(value, key){

@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <link href="{{ url_for('static',filename='index.css') }}" rel="stylesheet">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <title>dublin bikes map</title>
 </head>
 <body>
@@ -34,19 +35,17 @@
         <input class="input-box" type="text">
         <input type="button" value="Submit" onclick="getInputVal()">
     </div>
-    <div class="row" id="content-row1">
-        <div class="col-4" id="hourly">
-            <h4>hourly chart</h4>
-            <canvas id="hourly-chart"></canvas>
-        </div>
-        <div class="col-4" id="daily">
-            <h4>daily chart</h4>
-            <canvas id="daily-chart"></canvas>
-        </div>
-        <div class="col-4" id="prediction">
-            <h4>prediction chart</h4>
-            <canvas id="prediction-chart"></canvas>
-        </div>
+    <div class="row" id="hourly">
+        <h4>hourly chart</h4>
+        <div id="hourly-chart"></div>
+    </div>
+    <div class="row" id="daily">
+        <h4>daily chart</h4>
+        <div id="daily-chart"></div>
+    </div>
+    <div class="row" id="prediction">
+        <h4>prediction chart</h4>
+        <div id="prediction-chart"></div>
     </div>
     <div class="row" id="content-row2">
         <h4>weather forecast</h4>
