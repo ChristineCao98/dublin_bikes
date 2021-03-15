@@ -5,6 +5,7 @@ from flask_caching import Cache
 from sqlalchemy import func, extract
 from config.config import MySQL, APIKeys
 from time import time
+import datetime
 import pickle
 import pandas as pd
 import toolkits.prediction_helper as helper
@@ -97,13 +98,28 @@ def get_prediction(station_id):
     if latitude and longitude:
         weather_data = helper.get_weather_forecast()
         input_x, slot_timestamps = helper.create_prediction_input(weather_data, latitude, longitude)
+        slot_datetimes=[datetime.datetime.fromtimestamp(i) for i in slot_timestamps]
         prediction = model.predict(input_x)
         prediction_list = [int(i) for i in prediction.tolist()]
-
-        return jsonify({
-            'timestamp': slot_timestamps,
-            'availability_prediction': prediction_list
+        res_list = []
+        day_list = []
+        prev = slot_datetimes[0].day
+        day_list.append({
+            'date': slot_datetimes[0],
+            'hour': slot_datetimes[0].hour,
+            'availability_prediction': prediction_list[0]
         })
+        for i in range(1, len(slot_datetimes)):
+            if prev != slot_datetimes[i].day or i==len(slot_datetimes)-1:
+                prev=slot_datetimes[i].day
+                res_list.append(day_list)
+                day_list=[]
+            day_list.append({
+                'date': slot_datetimes[i],
+                'hour': slot_datetimes[i].hour,
+                'availability_prediction': prediction_list[i]
+            })
+        return jsonify(res_list)
     else:
         return jsonify({})
 
