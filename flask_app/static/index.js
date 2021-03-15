@@ -91,16 +91,16 @@ function showStatic(id){
   infowindow.setContent(content);
   infowindow.open(map,marker);
 }
-function showHourly(id){
-  axios.get('/api/hour/'+id).then(response=>{
+function createHourlyChart(title,chart_data){
+  try{
     var data = new google.visualization.DataTable();
-      data.addColumn('string', 'Hour of Day');
-      data.addColumn('number','average number');
-      response.data.forEach(hourlydata=>{
-        data.addRow([hourlydata.hour.toString(),hourlydata.available_bike]);
+    data.addColumn('string', 'Hour of Day');
+    data.addColumn('number','average number');
+      chart_data.forEach(hourlydata=>{
+        data.addRow([hourlydata. hour.toString(),hourlydata.available_bike]);
       });
       var options = {
-        title: 'Hourly availability data',
+        title: title,
         width:1100,
         hAxis: {
           title: 'Hour of day',
@@ -112,6 +112,32 @@ function showHourly(id){
       };
       var materialChart = new google.charts.Bar(document.getElementById('hourly-chart'));
       materialChart.draw(data, options);
+  }catch(error){
+    console.log(error);
+  }
+}
+function showHourly(id){
+  axios.get('/api/hour/'+id).then(response=>{
+    createHourlyChart('Hourly availability data',response.data)
+    // var data = new google.visualization.DataTable();
+    //   data.addColumn('string', 'Hour of Day');
+    //   data.addColumn('number','average number');
+    //   response.data.forEach(hourlydata=>{
+    //     data.addRow([hourlydata.hour.toString(),hourlydata.available_bike]);
+    //   });
+    //   var options = {
+    //     title: 'Hourly availability data',
+    //     width:1100,
+    //     hAxis: {
+    //       title: 'Hour of day',
+    //       showTextEvery: 1
+    //     },
+    //     vAxis: {
+    //       title: 'average number'
+    //     }
+    //   };
+    //   var materialChart = new google.charts.Bar(document.getElementById('hourly-chart'));
+    //   materialChart.draw(data, options);
   }).catch(error=>{
     console.log(error);
   });
