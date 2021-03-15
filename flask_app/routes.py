@@ -98,16 +98,15 @@ def get_prediction(station_id):
     if latitude and longitude:
         weather_data = helper.get_weather_forecast()
         input_x, slot_timestamps = helper.create_prediction_input(weather_data, latitude, longitude)
-        slot_datetimes = [datetime.datetime.fromtimestamp(i) for i in slot_timestamps]
-        prediction = model.predict(input_x)
-        prediction_list = [int(i) for i in prediction.tolist()]
+        slot_datetimes=[datetime.datetime.fromtimestamp(i) for i in slot_timestamps]
+        prediction_y = model.predict(input_x)
         res_list = []
         day_list = []
         prev = slot_datetimes[0].day
         day_list.append({
             'date': slot_datetimes[0],
             'hour': slot_datetimes[0].hour,
-            'availability_prediction': prediction_list[0]
+            'available_bike': prediction_y[0]
         })
         for i in range(1, len(slot_datetimes)):
             if prev != slot_datetimes[i].day or i==len(slot_datetimes)-1:
@@ -117,7 +116,7 @@ def get_prediction(station_id):
             day_list.append({
                 'date': slot_datetimes[i],
                 'hour': slot_datetimes[i].hour,
-                'available_bike': prediction_list[i]
+                'available_bike': prediction_y[i]
             })
         return jsonify(res_list)
     else:
