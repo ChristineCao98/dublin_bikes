@@ -164,6 +164,7 @@ function showDaily(id){
 }
 function showPrediction(id){
   currentDay=0;
+  document.getElementById('preButton').innerHTML='';
   document.getElementById('nextButton').innerHTML='<button onclick="nextButtonClick()">next</button>';
   axios.get('/api/prediction/'+id).then(response=>{
     predictionData=response.data;
