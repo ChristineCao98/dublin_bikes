@@ -99,8 +99,7 @@ def get_prediction(station_id):
         weather_data = helper.get_weather_forecast()
         input_x, slot_timestamps = helper.create_prediction_input(weather_data, latitude, longitude)
         slot_datetimes=[datetime.datetime.fromtimestamp(i) for i in slot_timestamps]
-        prediction = model.predict(input_x)
-        prediction_list = [int(i) for i in prediction.tolist()]
+        prediction_list = model.predict(input_x)
         res_list = []
         day_list = []
         prev = slot_datetimes[0].day
