@@ -5,6 +5,9 @@ from flask_caching import Cache
 from sqlalchemy import func, extract
 from config.config import MySQL, APIKeys
 from time import time
+import pickle
+import pandas as pd
+import toolkits.prediction_helper as helper
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = MySQL.URI
@@ -57,8 +60,8 @@ def get_station(station_id):
 @app.route('/api/hour/<int:station_id>')
 @cache.cached()
 def get_hourly(station_id):
-    hourdata=db.session.query(func.avg(DublinBike.available_bike)) \
-        .filter(DublinBike.number==station_id) \
+    hourdata = db.session.query(func.avg(DublinBike.available_bike)) \
+        .filter(DublinBike.number == station_id) \
         .group_by(extract('hour', DublinBike.localtime)) \
         .order_by(extract('hour', DublinBike.localtime)) \
         .all()
@@ -82,6 +85,27 @@ def get_daily(station_id):
          'available_bike': float(dailydata[i][0])
          }for i in range(7)
     ])
+
+
+@app.route('/api/prediction/<int:station_id>')
+@cache.cached()
+def get_prediction(station_id):
+
+    model = pickle.load(open('bike_prediction_model.pickle', "rb"))
+
+    latitude, longitude = helper.get_station_coordinate(db, station_id)
+    if latitude and longitude:
+        weather_data = helper.get_weather_forecast()
+        input_x, slot_timestamps = helper.create_prediction_input(weather_data, latitude, longitude)
+        prediction = model.predict(input_x)
+        prediction_list = [int(i) for i in prediction.tolist()]
+
+        return jsonify({
+            'timestamp': slot_timestamps,
+            'availability_prediction': prediction_list
+        })
+    else:
+        return jsonify({})
 
 
 if __name__ == '__main__':
