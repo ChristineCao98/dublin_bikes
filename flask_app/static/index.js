@@ -6,10 +6,19 @@ var stationInfo=new Map();
 var infowindow;
 var map;
 var weekday=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+var currentDay;
+var hourlyChart;
+var dailyChart;
+var predictionChart;
+var predictionData;
+google.charts.setOnLoadCallback(function () {
+  hourlyChart = new google.charts.Bar(document.getElementById('hourly-chart'));
+  dailyChart=new google.charts.Bar(document.getElementById('daily-chart'));
+  predictionChart=new google.charts.Bar(document.getElementById('prediction-chart'));
+});
 function initMap (){
-
   infowindow = new google.maps.InfoWindow();
-  let myLatLng = {lat: 53.350140, lng: -6.266155};
+  let myLatLng = {lat: 53.350140, lng: -6.266155};//set the latitude and longitude to Dublin
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 14,
     center: myLatLng,
@@ -74,7 +83,9 @@ function clickEvent(id){
   showStatic(id);
   showHourly(id);
   showDaily(id);
+  showPrediction(id);
 }
+//Show static information about the station
 function showStatic(id){
   var station=stationInfo.get(id);
   var marker=markerMap.get(id);
@@ -91,17 +102,18 @@ function showStatic(id){
   infowindow.setContent(content);
   infowindow.open(map,marker);
 }
-function createHourlyChart(title,chart_data){
+//Create average hourly availability bike number chart
+function createHourlyChart(title,chart_data,output_chart){
   try{
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Hour of Day');
     data.addColumn('number','average number');
       chart_data.forEach(hourlydata=>{
-        data.addRow([hourlydata. hour.toString(),hourlydata.available_bike]);
+        data.addRow([hourlydata.hour.toString(),hourlydata.available_bike]);
       });
       var options = {
         title: title,
-        width:1100,
+        width:800,
         hAxis: {
           title: 'Hour of day',
           showTextEvery: 1
@@ -110,38 +122,21 @@ function createHourlyChart(title,chart_data){
           title: 'average number'
         }
       };
-      var materialChart = new google.charts.Bar(document.getElementById('hourly-chart'));
-      materialChart.draw(data, options);
+      // var hourlyChart = new google.charts.Bar(document.getElementById(elementId));
+      output_chart.draw(data, options);
   }catch(error){
     console.log(error);
   }
 }
+//Show average hourly availability bike number
 function showHourly(id){
   axios.get('/api/hour/'+id).then(response=>{
-    createHourlyChart('Hourly availability data',response.data)
-    // var data = new google.visualization.DataTable();
-    //   data.addColumn('string', 'Hour of Day');
-    //   data.addColumn('number','average number');
-    //   response.data.forEach(hourlydata=>{
-    //     data.addRow([hourlydata.hour.toString(),hourlydata.available_bike]);
-    //   });
-    //   var options = {
-    //     title: 'Hourly availability data',
-    //     width:1100,
-    //     hAxis: {
-    //       title: 'Hour of day',
-    //       showTextEvery: 1
-    //     },
-    //     vAxis: {
-    //       title: 'average number'
-    //     }
-    //   };
-    //   var materialChart = new google.charts.Bar(document.getElementById('hourly-chart'));
-    //   materialChart.draw(data, options);
+    createHourlyChart('Hourly availability data',response.data,hourlyChart)
   }).catch(error=>{
     console.log(error);
   });
 }
+//Show average daily availability bike number
 function showDaily(id){
   axios.get('/api/day/'+id).then(response=>{
     var data = new google.visualization.DataTable();
@@ -161,11 +156,41 @@ function showDaily(id){
           title: 'average number'
         }
       };
-      var materialChart = new google.charts.Bar(document.getElementById('daily-chart'));
-      materialChart.draw(data, options);
+      var dailyChart = new google.charts.Bar(document.getElementById('daily-chart'));
+      dailyChart.draw(data, options);
   }).catch(error=>{
     console.log(error);
   });
+}
+function showPrediction(id){
+  currentDay=0;
+  document.getElementById('nextButton').innerHTML='<button onclick="nextButtonClick()">next</button>';
+  axios.get('/api/prediction/'+id).then(response=>{
+    predictionData=response.data;
+      createHourlyChart(predictionData[0][0].date.toString(),predictionData[0],predictionChart);
+      }
+  )
+}
+function nextButtonClick(){
+  currentDay+=1;
+  reloadPredictionChart();
+}
+function preButtonClick(){
+  currentDay-=1;
+  reloadPredictionChart();
+}
+function reloadPredictionChart(){
+  if(currentDay==0){
+    document.getElementById('preButton').innerHTML='';
+  }
+  else if(currentDay==predictionData.length-1){
+    document.getElementById('nextButton').innerHTML='';
+  }
+  else{
+    document.getElementById('preButton').innerHTML='<button onclick="preButtonClick()">previous</button>';
+    document.getElementById('nextButton').innerHTML='<button onclick="nextButtonClick()">next</button>';
+  }
+  createHourlyChart(predictionData[currentDay][0].date.toString(),predictionData[currentDay],predictionChart);
 }
 function displayMarker(sign){
     markerMap.forEach(function(value, key){
@@ -176,6 +201,7 @@ function displayMarker(sign){
         value.setIcon(`https://chart.apis.google.com/chart?chst=d_map_spin&chld=${scale}|0|${color}|11|_|${num}`)
     })
 }
+//return the size of the marker
 function getSize(num){
     if(num>20){
     return 0.75
@@ -184,6 +210,7 @@ function getSize(num){
     return 0.5
   }
 }
+//return the color of the marker
 function getColor(num){
   if(num>20){
     return "F00000"
