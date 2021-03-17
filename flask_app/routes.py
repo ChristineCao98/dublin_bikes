@@ -61,6 +61,7 @@ def get_station(station_id):
 @app.route('/api/hour/<int:station_id>')
 @cache.cached()
 def get_hourly(station_id):
+    """Return average hourly number of available bikes"""
     hourdata = db.session.query(func.avg(DublinBike.available_bike)) \
         .filter(DublinBike.number == station_id) \
         .group_by(extract('hour', DublinBike.localtime)) \
@@ -76,6 +77,7 @@ def get_hourly(station_id):
 @app.route('/api/day/<int:station_id>')
 @cache.cached()
 def get_daily(station_id):
+    """Return average daily number of available bikes"""
     dailydata = db.session.query(func.avg(DublinBike.available_bike)) \
         .filter(DublinBike.number == station_id) \
         .group_by(func.dayofweek(DublinBike.localtime)) \
@@ -91,7 +93,7 @@ def get_daily(station_id):
 @app.route('/api/prediction/<int:station_id>')
 @cache.cached()
 def get_prediction(station_id):
-
+    """Return the prediction data of available bikes in the following 5 days"""
     model = pickle.load(open(app.root_path + '\\bike_prediction_model.pickle', "rb"))
 
     latitude, longitude = helper.get_station_coordinate(db, station_id)
