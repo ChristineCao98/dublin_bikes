@@ -6,6 +6,7 @@ var stationInfo=new Map();
 var infowindow;
 var map;
 var weekday=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+var weekday2=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 var currentDay;
 var hourlyChart;
 var dailyChart;
@@ -84,6 +85,7 @@ function clickEvent(id){
   showHourly(id);
   showDaily(id);
   showPrediction(id);
+  showWeather(id);
 }
 //Show static information about the station
 function showStatic(id){
@@ -229,4 +231,38 @@ function handleLocationError(browserHasGeolocation, geolocation, pos) {
       : "Error: Your browser doesn't support geolocation."
   );
   geolocation.open(map);
+}
+function showWeather(id){
+  axios.get('/api/weather/'+id).then(response=>{
+    var ret=``;
+    var i=0;
+    var day;
+    for(let dailydata of response.data){
+      if(i==6) break;
+      var a = new Date(dailydata.dt*1000);
+      day=weekday2[a.getDay()];
+      if(i==0) day='T oday'
+      ret+=`
+      <div class="col-2">
+            <h5>${day}</h5>
+            <img src="${iconGenerator(dailydata.weather[0].icon)}">
+            <div class="row">
+                <div class="col-6">
+                ${dailydata.temp.day}°
+                </div>
+                <div class="col-6">
+                    ${dailydata.weather[0].main}
+                </div>
+            </div>
+        </div> 
+      `;
+    i++;
+    }
+      document.getElementById('weather').innerHTML=ret;
+    }).catch(error=>{
+    console.log(error);
+  });
+}
+function iconGenerator(id){
+  return 'http://openweathermap.org/img/wn/'+id+'@2x.png'
 }

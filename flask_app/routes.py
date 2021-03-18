@@ -9,6 +9,7 @@ import datetime
 import pickle
 import pandas as pd
 import toolkits.prediction_helper as helper
+from scraper.weather_forecast_scraper import scrape
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = MySQL.URI
@@ -56,6 +57,14 @@ def get_station(station_id):
     return jsonify({
         'data': station.serialize
     })
+
+
+@app.route('/api/weather/<int:station_id>')
+@cache.cached(timeout=300)
+def get_weather(station_id):
+    """Return weather information of weather information of current day and the following 5 days"""
+    latitude, longitude = helper.get_station_coordinate(db, station_id)
+    return jsonify(scrape(latitude,longitude))
 
 
 @app.route('/api/hour/<int:station_id>')
@@ -112,7 +121,7 @@ def get_prediction(station_id):
         })
         for i in range(1, len(slot_datetimes)):
             if prev != slot_datetimes[i].day or i==len(slot_datetimes)-1:
-                prev=slot_datetimes[i].day
+                prev = slot_datetimes[i].day
                 res_list.append(day_list)
                 day_list=[]
             day_list.append({
