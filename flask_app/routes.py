@@ -103,14 +103,20 @@ def get_daily(station_id):
 @cache.cached()
 def get_prediction(station_id):
     """Return the prediction data of available bikes in the following 5 days"""
+    # load prediction model
     model = pickle.load(open(app.root_path + '\\bike_prediction_model.pickle', "rb"))
 
     latitude, longitude = helper.get_station_coordinate(db, station_id)
     if latitude and longitude:
+        # prepare input data
         weather_data = helper.get_weather_forecast()
         input_x, slot_timestamps = helper.create_prediction_input(weather_data, latitude, longitude)
-        slot_datetimes=[datetime.datetime.fromtimestamp(i) for i in slot_timestamps]
+        slot_datetimes = [datetime.datetime.fromtimestamp(i) for i in slot_timestamps]
+
+        # predict
         prediction_y = model.predict(input_x)
+
+        # prepare for response object
         res_list = []
         day_list = []
         prev = slot_datetimes[0].day
@@ -120,10 +126,10 @@ def get_prediction(station_id):
             'available_bike': prediction_y[0]
         })
         for i in range(1, len(slot_datetimes)):
-            if prev != slot_datetimes[i].day or i==len(slot_datetimes)-1:
+            if prev != slot_datetimes[i].day or i == len(slot_datetimes)-1:
                 prev = slot_datetimes[i].day
                 res_list.append(day_list)
-                day_list=[]
+                day_list = []
             day_list.append({
                 'date': slot_datetimes[i],
                 'hour': slot_datetimes[i].hour,
