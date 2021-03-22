@@ -11,8 +11,8 @@ def get_weather_forecast():
           f'&units=metric'
     response = requests.get(url)
     response.raise_for_status()
-    print("Bike Request=", response.request.url)
-    print("Bike Response=", response.content)
+    print("Weather Request=", response.request.url)
+    print("Weather Response=", response.content)
     result = []
     if response:
         data = response.json()
