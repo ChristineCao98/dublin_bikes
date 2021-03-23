@@ -150,7 +150,9 @@ def ml_building_task():
 
 
 if __name__ == '__main__':
-    scheduler.add_job(id='Scraping task', func=current_data_scraping_task, trigger='interval', minutes=3)
-    scheduler.add_job(id='Model building task', func=ml_building_task, trigger='interval', minutes=6)
+    hours = '4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0'
+    minutes = '0,5,10,15,20,25,30,35,40,45,50,55'
+    scheduler.add_job(id='current_data_scraper', func=current_data_scraping_task, trigger='cron', hour=hours, minute=minutes)
+    scheduler.add_job(id='ml_builder', func=ml_building_task, trigger='cron', hour='1', minute='30')
     scheduler.start()
     app.run(debug=True, use_reloader=False)
