@@ -7,8 +7,16 @@ from config.config import MySQL, APIKeys
 from scraper import current_weather_scraper
 import pytz
 
-'''Call the scraper and save the data in the DB'''
+
 def scrape():
+    try:
+        scrape_bike_and_weather()
+    except Exception as e:
+        print("Error: " + str(e))
+
+
+def scrape_bike_and_weather():
+    print('in scrape_bike_and_weather')
     engine = create_engine(MySQL.URI)
     Base.metadata.create_all(engine)  # Create table
     Session = sessionmaker(bind=engine)
@@ -21,8 +29,8 @@ def scrape():
 
     response.raise_for_status()  # throw an error if made a bad request
 
-    print("Bike Request=", response.request.url)
-    print("Bike Response=", response.content)
+    # print("Bike Request=", response.request.url)
+    # print("Bike Response=", response.content)
 
     if response:
         response = response.json()
@@ -30,7 +38,7 @@ def scrape():
         dt = utc_now.strftime("%Y-%m-%d %H:%M:%S")
         current_weather_scraper.scrape(dt)
 
-        #Build table with columns
+        # Build table with columns
         for row in response:
             scraping_time = dt
             number = row["number"]
@@ -48,7 +56,7 @@ def scrape():
             status = row["status"]
             banking = row["banking"]
             bonus = row["bonus"]
-            localtime = pytz.utc.localize(utc_now)\
+            localtime = pytz.utc.localize(utc_now) \
                 .astimezone(pytz.timezone('Europe/Dublin'))
             session.add(DublinBike(scraping_time=scraping_time,
                                    number=number,

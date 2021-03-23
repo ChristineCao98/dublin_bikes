@@ -9,8 +9,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn import metrics
 import pickle
 
-
-def build_availability_model(app):
+def build(app):
     print('get ready to build prediction model')
     try:
         db = create_engine(MySQL.URI)
