@@ -80,6 +80,8 @@ function initMap (){
     console.log(error);
   });
 }
+
+//Click event for the marker on our map
 function clickEvent(id){
   showStatic(id);
   showHourly(id);
@@ -87,6 +89,7 @@ function clickEvent(id){
   showPrediction(id);
   showWeather(id);
 }
+
 //Show static information about the station
 function showStatic(id){
   var station=stationInfo.get(id);
@@ -104,6 +107,7 @@ function showStatic(id){
   infowindow.setContent(content);
   infowindow.open(map,marker);
 }
+
 //Create average hourly availability bike number chart
 function createHourlyChart(title,chart_data,output_chart){
   try{
@@ -130,6 +134,7 @@ function createHourlyChart(title,chart_data,output_chart){
     console.log(error);
   }
 }
+
 //Show average hourly availability bike number
 function showHourly(id){
   axios.get('/api/hour/'+id).then(response=>{
@@ -138,6 +143,7 @@ function showHourly(id){
     console.log(error);
   });
 }
+
 //Show average daily availability bike number
 function showDaily(id){
   axios.get('/api/day/'+id).then(response=>{
@@ -164,6 +170,8 @@ function showDaily(id){
     console.log(error);
   });
 }
+
+//Show hourly prediction chart for the following 5 days
 function showPrediction(id){
   currentDay=0;
   document.getElementById('preButton').innerHTML='';
@@ -174,14 +182,20 @@ function showPrediction(id){
       }
   )
 }
+
+//Click event for next button
 function nextButtonClick(){
   currentDay+=1;
   reloadPredictionChart();
 }
+
+//click event for previous button
 function preButtonClick(){
   currentDay-=1;
   reloadPredictionChart();
 }
+
+//Reload the prediction chart after clicking a button
 function reloadPredictionChart(){
   if(currentDay==0){
     document.getElementById('preButton').innerHTML='';
@@ -195,6 +209,8 @@ function reloadPredictionChart(){
   }
   createHourlyChart(predictionData[currentDay][0].date.toString(),predictionData[currentDay],predictionChart);
 }
+
+//Customizing the scale, color and the number shown on the marker
 function displayMarker(sign){
     markerMap.forEach(function(value, key){
         var station=stationInfo.get(key);
@@ -204,6 +220,7 @@ function displayMarker(sign){
         value.setIcon(`https://chart.apis.google.com/chart?chst=d_map_spin&chld=${scale}|0|${color}|11|_|${num}`)
     })
 }
+
 //return the size of the marker
 function getSize(num){
     if(num>20){
@@ -213,6 +230,7 @@ function getSize(num){
     return 0.5
   }
 }
+
 //return the color of the marker
 function getColor(num){
   if(num>20){
@@ -232,6 +250,8 @@ function handleLocationError(browserHasGeolocation, geolocation, pos) {
   );
   geolocation.open(map);
 }
+
+//Show weather information of the following 5 days
 function showWeather(id){
   axios.get('/api/weather/'+id).then(response=>{
     var ret=``;
@@ -263,6 +283,8 @@ function showWeather(id){
     console.log(error);
   });
 }
+
+//Return the corresponding weather icon
 function iconGenerator(id){
   return 'http://openweathermap.org/img/wn/'+id+'@2x.png'
 }
