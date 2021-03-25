@@ -234,11 +234,11 @@ function getSize(num){
 
 //return the color of the marker
 function getColor(num){
-  if(num>20){
-    return "F00000"
+  if(num>5){
+    return "00FF00"
   }
   else{
-    return "00FF00"
+    return "F00000"
   }
 }
 
