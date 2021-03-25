@@ -75,6 +75,7 @@ function initMap (){
     markerMap.set(station.number,marker);
     stationInfo.set(station.number,station);
     marker.addListener("click",()=>clickEvent(station.number));
+    generateMenu(stations);
     });
   }).catch(error=>{
     console.log(error);
@@ -261,7 +262,7 @@ function showWeather(id){
       if(i==6) break;
       var a = new Date(dailydata.dt*1000);
       day=weekday2[a.getDay()];
-      if(i==0) day='T oday'
+      if(i==0) day='Today'
       ret+=`
       <div class="col-2">
             <h5>${day}</h5>
@@ -286,5 +287,19 @@ function showWeather(id){
 
 //Return the corresponding weather icon
 function iconGenerator(id){
-  return 'http://openweathermap.org/img/wn/'+id+'@2x.png'
+  return 'http://openweathermap.org/img/wn/'+id+'@2x.png';
+}
+
+function generateMenu(stations){
+  var content=``;
+  content+=`<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+    Dropdown
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">`;
+  stations.forEach(station=>{
+    content+=`<li><button class="dropdown-item" type="button" onclick="clickEvent(${station.number})">${station.address}</button></li>`;
+  });
+  content+=`</ul></div>`;
+  document.getElementById("dropdown-menu").innerHTML=content;
 }
