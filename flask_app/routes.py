@@ -7,15 +7,18 @@ from config.config import MySQL, APIKeys
 from time import time
 import datetime
 import pickle
-import pandas as pd
 import toolkits.prediction_helper as helper
 from scraper.weather_forecast_scraper import scrape
+from flask_apscheduler import APScheduler
+from scraper import current_data_scraper as current_scraper
+from flask_app import prediction_model_builder as ml_builder
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = MySQL.URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['CACHE_TYPE'] = 'simple'
 app.config['CACHE_DEFAULT_TIMEOUT'] = 300
+scheduler = APScheduler()
 
 db = SQLAlchemy(app)
 cache = Cache(app)
@@ -64,7 +67,7 @@ def get_station(station_id):
 def get_weather(station_id):
     """Return weather information of weather information of current day and the following 5 days"""
     latitude, longitude = helper.get_station_coordinate(db, station_id)
-    return jsonify(scrape(latitude,longitude))
+    return jsonify(scrape(latitude, longitude))
 
 
 @app.route('/api/hour/<int:station_id>')
@@ -79,7 +82,7 @@ def get_hourly(station_id):
     return jsonify([
         {'hour': i,
          'available_bike': float(hourdata[i][0])
-         }for i in range(24)
+         } for i in range(24)
     ])
 
 
@@ -95,7 +98,7 @@ def get_daily(station_id):
     return jsonify([
         {'day': i,
          'available_bike': float(dailydata[i][0])
-         }for i in range(7)
+         } for i in range(7)
     ])
 
 
@@ -103,14 +106,20 @@ def get_daily(station_id):
 @cache.cached()
 def get_prediction(station_id):
     """Return the prediction data of available bikes in the following 5 days"""
+    # load prediction model
     model = pickle.load(open(app.root_path + '\\bike_prediction_model.pickle', "rb"))
 
     latitude, longitude = helper.get_station_coordinate(db, station_id)
     if latitude and longitude:
+        # prepare input data
         weather_data = helper.get_weather_forecast()
         input_x, slot_timestamps = helper.create_prediction_input(weather_data, latitude, longitude)
-        slot_datetimes=[datetime.datetime.fromtimestamp(i) for i in slot_timestamps]
+        slot_datetimes = [datetime.datetime.fromtimestamp(i) for i in slot_timestamps]
+
+        # predict
         prediction_y = model.predict(input_x)
+
+        # prepare for response object
         res_list = []
         day_list = []
         prev = slot_datetimes[0].day
@@ -120,10 +129,10 @@ def get_prediction(station_id):
             'available_bike': prediction_y[0]
         })
         for i in range(1, len(slot_datetimes)):
-            if prev != slot_datetimes[i].day or i==len(slot_datetimes)-1:
+            if prev != slot_datetimes[i].day or i == len(slot_datetimes) - 1:
                 prev = slot_datetimes[i].day
                 res_list.append(day_list)
-                day_list=[]
+                day_list = []
             day_list.append({
                 'date': slot_datetimes[i],
                 'hour': slot_datetimes[i].hour,
@@ -133,6 +142,17 @@ def get_prediction(station_id):
     else:
         return jsonify({})
 
+def current_data_scraping_task():
+    current_scraper.scrape()
+
+def ml_building_task():
+    ml_builder.build(app)
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    hours = '4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0'
+    minutes = '0,5,10,15,20,25,30,35,40,45,50,55'
+    scheduler.add_job(id='current_data_scraper', func=current_data_scraping_task, trigger='cron', hour=hours, minute=minutes)
+    scheduler.add_job(id='ml_builder', func=ml_building_task, trigger='cron', hour='1', minute='30')
+    scheduler.start()
+    app.run(debug=True, use_reloader=False)
