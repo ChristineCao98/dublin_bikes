@@ -58,7 +58,7 @@
 
 
 
-    <script src="{{ url_for('static',filename='index.js') }}?t={{time()}}"></script>{# time is only for developement stage #}
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFP5d_7EMWgLSyTTuCvpYcUU--AQ239So&callback=initMap&libraries=&v=weekly" async defer></script>
+    <script src="{{ url_for('static',filename='index.js') }}"></script>{# time is only for developement stage #}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ map_api }}&callback=initMap&libraries=&v=weekly" async defer></script>
 </body>
 </html>
