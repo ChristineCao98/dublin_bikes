@@ -176,7 +176,7 @@ function showDaily(id){
 function showPrediction(id){
   currentDay=0;
   document.getElementById('preButton').innerHTML='';
-  document.getElementById('nextButton').innerHTML='<button onclick="nextButtonClick()">next</button>';
+  document.getElementById('nextButton').innerHTML='<button onclick="nextButtonClick()">Next Day</button>';
   axios.get('/api/prediction/'+id).then(response=>{
     predictionData=response.data;
       createHourlyChart(predictionData[0][0].date.toString(),predictionData[0],predictionChart);
@@ -205,8 +205,8 @@ function reloadPredictionChart(){
     document.getElementById('nextButton').innerHTML='';
   }
   else{
-    document.getElementById('preButton').innerHTML='<button onclick="preButtonClick()">previous</button>';
-    document.getElementById('nextButton').innerHTML='<button onclick="nextButtonClick()">next</button>';
+    document.getElementById('preButton').innerHTML='<button onclick="preButtonClick()">Previous Day</button>';
+    document.getElementById('nextButton').innerHTML='<button onclick="nextButtonClick()">Next Day</button>';
   }
   createHourlyChart(predictionData[currentDay][0].date.toString(),predictionData[currentDay],predictionChart);
 }
