@@ -7,7 +7,8 @@ STATIONS_URI = "https://api.jcdecaux.com/vls/v1/stations"
 class APIKeys:
     openweather_key = os.getenv("WEATHER_API_KEY")
     bike_API = os.getenv("BIKE_API_KEY")
-    map_API=os.getenv("MAP_API_KEY")
+    map_API = os.getenv("MAP_API_KEY")
+
 
 class MySQL:
     host = os.getenv("DB_URI")

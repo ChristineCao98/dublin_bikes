@@ -1,16 +1,18 @@
-from flask import Flask, render_template, jsonify, url_for
-from models.schemas import DublinBike
-from flask_sqlalchemy import SQLAlchemy
-from flask_caching import Cache
-from sqlalchemy import func, extract
-from config.config import MySQL, APIKeys
 import datetime
 import pickle
-import toolkits.prediction_helper as helper
-from scraper.weather_forecast_scraper import scrape
+
+from flask import Flask, render_template, jsonify
 from flask_apscheduler import APScheduler
-from scraper import current_data_scraper as current_scraper
+from flask_caching import Cache
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func, extract
+
+import toolkits.prediction_helper as helper
+from config.config import MySQL, APIKeys
 from flask_app import prediction_model_builder as ml_builder
+from models.schemas import DublinBike
+from scraper import current_data_scraper as current_scraper
+from scraper.weather_forecast_scraper import scrape
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = MySQL.URI
@@ -141,8 +143,10 @@ def get_prediction(station_id):
     else:
         return jsonify({})
 
+
 def current_data_scraping_task():
     current_scraper.scrape()
+
 
 def ml_building_task():
     ml_builder.build(app)
@@ -151,7 +155,8 @@ def ml_building_task():
 if __name__ == '__main__':
     hours = '4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0'
     minutes = '0,5,10,15,20,25,30,35,40,45,50,55'
-    scheduler.add_job(id='current_data_scraper', func=current_data_scraping_task, trigger='cron', hour=hours, minute=minutes)
+    scheduler.add_job(id='current_data_scraper', func=current_data_scraping_task, trigger='cron', hour=hours,
+                      minute=minutes)
     scheduler.add_job(id='ml_builder', func=ml_building_task, trigger='cron', hour='1', minute='30')
     scheduler.start()
     app.run(debug=True, use_reloader=False)

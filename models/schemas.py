@@ -74,7 +74,6 @@ class CurrentWeather(Base):
         self.icon = icon
         self.weekday = weekday
 
-
     @property
     def serialize(self):
         return {
@@ -110,4 +109,3 @@ class StaticBike(Base):
             'latitude': self.latitude,
             'longitude': self.longitude
         }
-
