@@ -294,7 +294,7 @@ function generateMenu(stations){
   var content=``;
   content+=`<div class="dropdown">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-    Dropdown
+    Select Bike Station
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">`;
   stations.forEach(station=>{

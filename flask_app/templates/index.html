@@ -14,12 +14,15 @@
     <title>dublin bikes map</title>
 </head>
 <body>
-<div class="container">
-  <div class="page-header">
+<div class="page-header">
     <img src="static/DB_LOGO.png" alt="logo">
-    <h1 class="text-center">Dublin bike</h1>
+    <h1 class="text-center">Dublin Bikes</h1>
   </div>
+<div class="container">
     <div class="row justify-content-end">
+        <div class="dropdown" id="dropdown-menu">
+
+        </div>
       <div class="col-4">
           <div class="btn-group">
               <button  type="button" id="abikes" class="btn btn-primary" onclick="displayMarker(0)">AVAILABLE BIKES</button>
@@ -31,34 +34,31 @@
         <!--The div element for the map -->
         <div id="map"></div>
     </div>
-        <div class="dropdown" id="dropdown-menu">
 
-        </div>
+    <div class="charts">
     <div class="row" id="hourly">
-        <h4>hourly chart</h4>
+        <h4>Hourly Chart</h4>
         <div id="hourly-chart"></div>
     </div>
     <div class="row" id="daily">
-        <h4>daily chart</h4>
+        <h4>Daily Chart</h4>
         <div id="daily-chart"></div>
     </div>
     <div class="row" id="prediction">
         <div class="col-1" id="preButton"></div>
             <div class="col-10">
-                <h4>prediction chart</h4>
+                <h4>Prediction Chart</h4>
                 <div id="prediction-chart"></div>
             </div>
         <div class="col-1" id="nextButton"></div>
     </div>
     <div class="row" id="content-row2">
-        <h4>weather forecast</h4>
+        <h4>Weather Forecast</h4>
         <div class="row" id="weather"></div>
     </div>
   </div>
-
-
-
-    <script src="{{ url_for('static',filename='index.js') }}"></script>{# time is only for developement stage #}
+</div>
+    <script src="{{ url_for('static',filename='index.js') }}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key={{ map_api }}&callback=initMap&libraries=&v=weekly" async defer></script>
 </body>
 </html>

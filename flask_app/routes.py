@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_caching import Cache
 from sqlalchemy import func, extract
 from config.config import MySQL, APIKeys
-from time import time
 import datetime
 import pickle
 import toolkits.prediction_helper as helper
@@ -27,7 +26,7 @@ cache = Cache(app)
 @app.route('/')
 @cache.cached()
 def index():
-    return render_template('index.html', map_api=APIKeys.map_API, time=time)
+    return render_template('index.html', map_api=APIKeys.map_API)
 
 
 @app.route('/api/stations/')
