@@ -121,6 +121,8 @@ function createHourlyChart(title,chart_data,output_chart){
       var options = {
         title: title,
         width:800,
+        colors: ['#074b54'],
+        legend: {position: 'none'},
         hAxis: {
           title: 'Hour of day',
           showTextEvery: 1
@@ -157,6 +159,8 @@ function showDaily(id){
       var options = {
         title: 'Daily availability data',
         width:1000,
+        legend: {position: 'none'},
+        colors: ['#074b54'],
         hAxis: {
           title: 'day of week',
           showTextEvery: 1
