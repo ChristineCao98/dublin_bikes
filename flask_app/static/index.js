@@ -114,7 +114,7 @@ function createHourlyChart(title,chart_data,output_chart){
   try{
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Hour of Day');
-    data.addColumn('number','average number');
+    data.addColumn('number','available bikes');
       chart_data.forEach(hourlydata=>{
         data.addRow([hourlydata.hour.toString(),hourlydata.available_bike]);
       });
@@ -128,7 +128,7 @@ function createHourlyChart(title,chart_data,output_chart){
           showTextEvery: 1
         },
         vAxis: {
-          title: 'average number'
+          title: 'available bikes'
         }
       };
       // var hourlyChart = new google.charts.Bar(document.getElementById(elementId));
