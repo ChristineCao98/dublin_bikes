@@ -96,10 +96,10 @@ function showStatic(id){
   var station=stationInfo.get(id);
   var marker=markerMap.get(id);
   var content=`
-  <h6>Basic information</h6>
+  <h6>Station Information</h6>
   <ul>
-  <li>Station No.${station.number}</li>
-  <li>Full address: ${station.address}</li>
+  <li>Station Number: ${station.number}</li>
+  <li>Station Address: ${station.address}</li>
   <li>Available bikes: ${station.available_bike}</li>
   <li>Free stands: ${station.available_bike_stand}</li>
   <li>Total capacity: ${station.bike_stand}</li>
