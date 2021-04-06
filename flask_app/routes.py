@@ -127,7 +127,7 @@ def get_prediction(station_id):
         day_list = []
         prev = slot_datetimes[0].day
         day_list.append({
-            'date': slot_datetimes[0],
+            'date': slot_datetimes[0].weekday(),
             'hour': slot_datetimes[0].hour,
             'available_bike': prediction_y[0]
         })
@@ -137,7 +137,7 @@ def get_prediction(station_id):
                 res_list.append(day_list)
                 day_list = []
             day_list.append({
-                'date': slot_datetimes[i],
+                'date': slot_datetimes[i].weekday(),
                 'hour': slot_datetimes[i].hour,
                 'available_bike': prediction_y[i]
             })

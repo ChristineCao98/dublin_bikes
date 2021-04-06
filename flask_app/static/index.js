@@ -183,7 +183,8 @@ function showPrediction(id){
   document.getElementById('nextButton').innerHTML='<button onclick="nextButtonClick()">Next Day</button>';
   axios.get('/api/prediction/'+id).then(response=>{
     predictionData=response.data;
-      createHourlyChart(predictionData[0][0].date.toString(),predictionData[0],predictionChart);
+    document.getElementById('prediction-title').innerHTML=weekday[predictionData[currentDay][0].date];
+      createHourlyChart(weekday[predictionData[0][0].date],predictionData[0],predictionChart);
       }
   )
 }
@@ -212,7 +213,8 @@ function reloadPredictionChart(){
     document.getElementById('preButton').innerHTML='<button onclick="preButtonClick()">Prev Day</button>';
     document.getElementById('nextButton').innerHTML='<button onclick="nextButtonClick()">Next Day</button>';
   }
-  createHourlyChart(predictionData[currentDay][0].date.toString(),predictionData[currentDay],predictionChart);
+  document.getElementById('prediction-title').innerHTML=weekday[predictionData[currentDay][0].date];
+  createHourlyChart(weekday[predictionData[0][0].date],predictionData[currentDay],predictionChart);
 }
 
 //Customizing the scale, color and the number shown on the marker
