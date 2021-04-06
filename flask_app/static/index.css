@@ -118,3 +118,9 @@ li {
     display: list-item;
     text-align: left;
 }
+
+.dropdown-menu.show {
+    height: 300px;
+    display: block;
+    overflow: auto;
+}
