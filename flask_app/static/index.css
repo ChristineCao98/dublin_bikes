@@ -124,3 +124,8 @@ li {
     display: block;
     overflow: auto;
 }
+
+.col-1 {
+  display: flex;
+  align-items: center;
+}
