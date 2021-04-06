@@ -63,7 +63,8 @@ def build(app):
             print("RMSE (Root Mean Squared Error): ", metrics.mean_squared_error(actual_val, predictions)**0.5)
             print("R2: ", metrics.r2_score(actual_val, predictions))
         print_metrics(y_test, prediction)
-        pickle.dump(model, open(app.root_path + '\\bike_prediction_model.pickle', 'wb'))
+        with open(app.root_path + '\\bike_prediction_model.pickle', 'wb') as f:
+            pickle.dump(model, f)
         print('model building is done')
     finally:
         # Close connections
