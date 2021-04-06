@@ -152,7 +152,7 @@ function showDaily(id){
   axios.get('/api/day/'+id).then(response=>{
     var data = new google.visualization.DataTable();
       data.addColumn('string', 'Day of Week');
-      data.addColumn('number','average number');
+      data.addColumn('number','available bikes');
       response.data.forEach(dailydata=>{
         data.addRow([weekday[dailydata.day],dailydata.available_bike]);
       });
