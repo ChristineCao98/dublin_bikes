@@ -89,28 +89,43 @@ padding-top: 30px;
     width: 100%;
 }
 button {
-    appearance: auto;
-    -webkit-writing-mode: horizontal-tb !important;
-    text-rendering: auto;
     color: white;
-    letter-spacing: normal;
-    word-spacing: normal;
-    text-transform: none;
-    text-indent: 0px;
-    text-shadow: none;
     display: inline-block;
     text-align: center;
-    align-items: flex-start;
-    cursor: default;
     background-color: #074b54;
-    box-sizing: border-box;
-    margin: 0em;
     font-color: white;
     padding: 2px 6px;
-    border-width: 1px;
-    border-style: outset;
-    border-color: white;
-    border-image: initial;
-    border-radius: .25rem;
     font-size: 12px;
+}
+
+.row {
+    padding: 20px;
+}
+
+.footer {
+background:#074b54;
+height: 50px;
+color:white;
+text-align:center;
+position:relative;
+bottom:0px;
+left:0px;
+padding-top:20px;
+width:100%;
+}
+
+li {
+    display: list-item;
+    text-align: left;
+}
+
+.dropdown-menu.show {
+    height: 300px;
+    display: block;
+    overflow: auto;
+}
+
+.col-1 {
+  display: flex;
+  align-items: center;
 }
