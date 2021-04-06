@@ -209,7 +209,7 @@ function reloadPredictionChart(){
     document.getElementById('nextButton').innerHTML='';
   }
   else{
-    document.getElementById('preButton').innerHTML='<button onclick="preButtonClick()">Previous Day</button>';
+    document.getElementById('preButton').innerHTML='<button onclick="preButtonClick()">Prev Day</button>';
     document.getElementById('nextButton').innerHTML='<button onclick="nextButtonClick()">Next Day</button>';
   }
   createHourlyChart(predictionData[currentDay][0].date.toString(),predictionData[currentDay],predictionChart);
@@ -239,7 +239,7 @@ function getSize(num){
 //return the color of the marker
 function getColor(num){
   if(num>5){
-    return "00FF00"
+    return "2E8B57"
   }
   else{
     return "F00000"
