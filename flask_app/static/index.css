@@ -116,13 +116,22 @@ button {
 }
 
 .row {
-    margin: 0 auto;
-    /* --bs-gutter-x: 1.5rem; */
-    --bs-gutter-y: 0;
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: calc(var(--bs-gutter-y) * -1);
-    /* margin-right: calc(var(--bs-gutter-x)/ -2); */
-    /* margin-left: calc(var(--bs-gutter-x)/ -2); */
     padding: 20px;
+}
+
+.footer {
+background:#074b54;
+height: 50px;
+color:white;
+text-align:center;
+position:relative;
+bottom:0px;
+left:0px;
+padding-top:20px;
+width:100%;
+}
+
+li {
+    display: list-item;
+    text-align: left;
 }

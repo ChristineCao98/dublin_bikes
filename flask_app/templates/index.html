@@ -58,7 +58,12 @@
         <div class="row" id="weather"></div>
     </div>
 </div>
-    <script src="{{ url_for('static',filename='index.js') }}"></script>
+
+<div class="footer">
+    &copy; COMP30830 Software Engineering Assignment | Designed by AnYi Huang, Rachel Courtney, Xiaoyan Cao
+    </div>
+
+<script src="{{ url_for('static',filename='index.js') }}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key={{ map_api }}&callback=initMap&libraries=&v=weekly" async defer></script>
 </body>
 </html>
