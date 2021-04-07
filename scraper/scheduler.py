@@ -1,7 +1,8 @@
-from scraper import current_data_scraper # ,forecast_scraper
+from scraper import current_data_scraper  # ,forecast_scraper
 import time
 
 ''' To be deleted '''
+
 
 def main():
     while True:
@@ -13,5 +14,6 @@ def main():
         except Exception as e:
             print("Error: " + str(e))
     print("End of scheduler")
-main()
 
+
+main()
