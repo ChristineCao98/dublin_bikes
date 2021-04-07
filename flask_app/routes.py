@@ -14,6 +14,12 @@ from models.schemas import DublinBike
 from scraper import current_data_scraper as current_scraper
 from scraper.weather_forecast_scraper import scrape
 
+import logging
+
+logging.basicConfig(filename='record.log', level=logging.DEBUG,
+                    format=f'%(asctime)s %(levelname)s %(name)s : %(message)s')
+
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = MySQL.URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -107,43 +113,49 @@ def get_daily(station_id):
 @cache.cached()
 def get_prediction(station_id):
     """Return the prediction data of available bikes in the following 5 days"""
-    # load prediction model
-    model = None
-    with open(app.root_path + '\\bike_prediction_model.pickle', "rb") as f:
-        model = pickle.load(f)
+    try:
+        # load prediction model
+        model = None
+        with open(app.root_path + '\\bike_prediction_model.pickle', "rb") as f:
+            model = pickle.load(f)
 
-    latitude, longitude = helper.get_station_coordinate(db, station_id)
-    if latitude and longitude and model:
-        # prepare input data
-        weather_data = helper.get_weather_forecast()
-        input_x, slot_timestamps = helper.create_prediction_input(weather_data, latitude, longitude)
-        slot_datetimes = [datetime.datetime.fromtimestamp(i) for i in slot_timestamps]
+        app.logger.debug("pickle path:" + app.root_path + "\\bike_prediction_model.pickle")
 
-        # predict
-        prediction_y = model.predict(input_x)
+        latitude, longitude = helper.get_station_coordinate(db, station_id)
+        if latitude and longitude and model:
+            # prepare input data
+            weather_data = helper.get_weather_forecast()
+            input_x, slot_timestamps = helper.create_prediction_input(weather_data, latitude, longitude)
+            slot_datetimes = [datetime.datetime.fromtimestamp(i) for i in slot_timestamps]
 
-        # prepare for response object
-        res_list = []
-        day_list = []
-        prev = slot_datetimes[0].day
-        day_list.append({
-            'date': slot_datetimes[0].weekday(),
-            'hour': slot_datetimes[0].hour,
-            'available_bike': prediction_y[0]
-        })
-        for i in range(1, len(slot_datetimes)):
-            if prev != slot_datetimes[i].day or i == len(slot_datetimes) - 1:
-                prev = slot_datetimes[i].day
-                res_list.append(day_list)
-                day_list = []
+            # predict
+            prediction_y = model.predict(input_x)
+
+            # prepare for response object
+            res_list = []
+            day_list = []
+            prev = slot_datetimes[0].day
             day_list.append({
-                'date': slot_datetimes[i].weekday(),
-                'hour': slot_datetimes[i].hour,
-                'available_bike': prediction_y[i]
+                'date': slot_datetimes[0].weekday(),
+                'hour': slot_datetimes[0].hour,
+                'available_bike': prediction_y[0]
             })
-        return jsonify(res_list)
-    else:
-        return jsonify({})
+            for i in range(1, len(slot_datetimes)):
+                if prev != slot_datetimes[i].day or i == len(slot_datetimes) - 1:
+                    prev = slot_datetimes[i].day
+                    res_list.append(day_list)
+                    day_list = []
+                day_list.append({
+                    'date': slot_datetimes[i].weekday(),
+                    'hour': slot_datetimes[i].hour,
+                    'available_bike': prediction_y[i]
+                })
+            return jsonify(res_list)
+        else:
+            return jsonify({})
+    except Exception as e:
+        logging.error(e, exc_info=True)
+
 
 
 def current_data_scraping_task():
