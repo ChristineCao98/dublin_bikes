@@ -44,4 +44,12 @@ This Project is intended for the "COMP30830 Software Engineering" Module, taught
 ## User Interface 
 ![dublin_bikes](https://user-images.githubusercontent.com/71882629/113942534-d79ce780-97f8-11eb-8b64-4bc281a15911.png)
 
+#References
+1. Bike API: https://developer.jcdecaux.com/#/home
+2. Weather API: https://openweathermap.org/api
+3. Map API: https://developers.google.com/maps
+4. Charts: https://developers.google.com/chart
+5. Flask Documentation: https://flask.palletsprojects.com/en/1.1.x/
+6. Testing: https://pypi.org/project/flask-unittest/ 
+
 
