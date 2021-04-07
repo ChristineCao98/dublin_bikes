@@ -20,25 +20,25 @@ This Project is intended for the "COMP30830 Software Engineering" Module, taught
 - For each marker selected the following can be seen:
  1. The Station Number 
  2. The Station Address
- 3. The Number of availble bikes 
+ 3. The Number of available bikes 
  4. The Number of free stands 
  5. Total capacity at that station 
 
 - As well as station information (upon marker selection), our website enables you to see:
- 1. The average nunber of bikes available per hour over a 24h period. 
+ 1. The average number of bikes available per hour over a 24h period. 
  2. The average number of bikes available per day over a 1 week period
- 3. A prediction (based off historical data) of bike number availablity for the next four days, showing an hour by hour prediction.
+ 3. A prediction (based on historical data) of bike number availability for the next four days, showing an hour by hour prediction.
  4. Weather information for that day, as well as the next 5 days
 
 - Our website allows you to enable location services on the map to provide users with the ability to find their closest bike station. 
 - A filter may also be applied to the map to further highlight available bikes/stands. This enables users to find desired information at a greater convenience. 
 
 #### Available Bikes Filter (default)
-- A marker will appear green in colour if there are over 5 bikes available. The marker will appear larger in size if there is over 20 bikes available.
+- A marker will appear green in colour if there are over 5 bikes available. The marker will appear larger in size if there are over 20 bikes available.
 - A marker will appear red if there are 5 or less bikes available. The marker size will appear smaller in size if there less than 20 bikes available.
 
 #### Available Stands Filter
-- A marker will appear green in colour if there are over 5 stands available,. The marker will appear larger in size if there is over 20 stands available.
+- A marker will appear green in colour if there are over 5 stands available. The marker will appear larger in size if there are over 20 stands available.
 - A marker will appear red if there are 5 or less stands available. The marker size will appear smaller in size if there less than 20 stands available.
 
 ## User Interface 
