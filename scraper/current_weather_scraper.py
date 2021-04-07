@@ -69,4 +69,3 @@ def scrape(dt, app):
     else:
         app.logger.info("Can not find stations")
     session.close()
-
