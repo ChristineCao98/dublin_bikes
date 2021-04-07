@@ -36,4 +36,4 @@ if __name__ == "__main__":
         s.rollback()  # Rollback the changes on error
     finally:
         s.close()  # Close the connection
-    print("Time elapsed: " + str(time() - t) + " s.")
+    # print("Time elapsed: " + str(time() - t) + " s.")

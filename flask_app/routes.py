@@ -126,7 +126,7 @@ def get_prediction(station_id):
         latitude, longitude = helper.get_station_coordinate(db, station_id)
         if latitude and longitude and model:
             # prepare input data
-            weather_data = helper.get_weather_forecast()
+            weather_data = helper.get_weather_forecast(app)
             input_x, slot_timestamps = helper.create_prediction_input(weather_data, latitude, longitude)
             slot_datetimes = [datetime.datetime.fromtimestamp(i) for i in slot_timestamps]
 
@@ -156,13 +156,13 @@ def get_prediction(station_id):
         else:
             return jsonify({})
     except Exception as e:
-        logging.error(e, exc_info=True)
+        app.logger.error(e, exc_info=True)
         return jsonify({})
 
 
 
 def current_data_scraping_task():
-    current_scraper.scrape()
+    current_scraper.scrape(app)
 
 
 def ml_building_task():

@@ -8,15 +8,12 @@ from scraper import current_weather_scraper
 import pytz
 
 
-def scrape():
-    try:
-        scrape_bike_and_weather()
-    except Exception as e:
-        print("Error: " + str(e))
+def scrape(app):
+    scrape_bike_and_weather(app)
 
 
-def scrape_bike_and_weather():
-    print('in scrape_bike_and_weather')
+def scrape_bike_and_weather(app):
+    app.logger.info("Running scrape_bike_and_weather")
     engine = create_engine(MySQL.URI)
     Base.metadata.create_all(engine)  # Create table
     Session = sessionmaker(bind=engine)
@@ -29,14 +26,14 @@ def scrape_bike_and_weather():
 
     response.raise_for_status()  # throw an error if made a bad request
 
-    # print("Bike Request=", response.request.url)
-    # print("Bike Response=", response.content)
+    app.logger.info("Bike Request=" + str(response.request.url))
+    app.logger.info("Bike Response=" + str(response.content))
 
     if response:
         response = response.json()
         utc_now = datetime.utcnow()
         dt = utc_now.strftime("%Y-%m-%d %H:%M:%S")
-        current_weather_scraper.scrape(dt)
+        current_weather_scraper.scrape(dt, app)
 
         # Build table with columns
         for row in response:
@@ -78,5 +75,5 @@ def scrape_bike_and_weather():
         return dt
 
 
-if __name__ == '__main__':
-    scrape()
+# if __name__ == '__main__':
+#     scrape()

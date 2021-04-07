@@ -4,15 +4,15 @@ import pandas as pd
 from models.schemas import StaticBike
 from datetime import datetime
 
-def get_weather_forecast():
+def get_weather_forecast(app):
     url = f'http://api.openweathermap.org/data/2.5/forecast?' \
           f'q=Dublin,ie' \
           f'&appid={APIKeys.openweather_key}' \
           f'&units=metric'
     response = requests.get(url)
     response.raise_for_status()
-    # print("Weather Request=", response.request.url)
-    # print("Weather Response=", response.content)
+    app.logger.info("Weather Request=" + str(response.request.url))
+    app.logger.info("Weather Response=" + str(response.content))
     result = []
     if response:
         data = response.json()

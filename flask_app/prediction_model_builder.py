@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import sklearn
 from sqlalchemy import create_engine, exists
@@ -10,12 +12,12 @@ from sklearn import metrics
 import pickle
 
 def build(app):
-    print('get ready to build prediction model')
+    app.logger.info("Start to rebuild prediction model")
     try:
         db = create_engine(MySQL.URI)
         conn = db.connect()
         # retrieve data
-        print('start retrieving data from db')
+        app.logger.info('Start to retrieve data from db')
         df_all_data = pd.read_sql_query("SELECT * FROM dublin_bike.bike_history AS b INNER JOIN "
                                         "dublin_bike.weather_history AS w ON b.scraping_time = w.datetime and b.number = "
                                         "w.stationNum", conn)
@@ -44,7 +46,7 @@ def build(app):
         x_train, x_test, y_train, y_test = train_test_split(input_model, output, test_size=0.2, random_state=40)
 
         # train model
-        print('start training model')
+        app.logger.info('Start to train model')
         model = RandomForestRegressor(n_estimators=10)
         model.fit(x_train, y_train)
 
@@ -58,14 +60,18 @@ def build(app):
         # evaluate
         def print_metrics(actual_val, predictions):
             # print evaluation measures
-            print("MAE (Mean Absolute Error): ", metrics.mean_absolute_error(actual_val, predictions))
-            print("MSE (Mean Squared Error): ", metrics.mean_squared_error(actual_val, predictions))
-            print("RMSE (Root Mean Squared Error): ", metrics.mean_squared_error(actual_val, predictions)**0.5)
-            print("R2: ", metrics.r2_score(actual_val, predictions))
+            app.logger.info("MAE (Mean Absolute Error): " + str(metrics.mean_absolute_error(actual_val, predictions))
+            + ", MSE (Mean Squared Error): " + str(metrics.mean_squared_error(actual_val, predictions))
+            + ", RMSE (Root Mean Squared Error): " + str(metrics.mean_squared_error(actual_val, predictions)**0.5)
+            + ", R2: " + str(metrics.r2_score(actual_val, predictions)))
         print_metrics(y_test, prediction)
-        with open(app.root_path + '\\bike_prediction_model.pickle', 'wb') as f:
+
+        with open(os.path.join(app.root_path, "bike_prediction_model.pickle"), 'wb') as f:
             pickle.dump(model, f)
-        print('model building is done')
+
+        app.logger.info('Model rebuilding is done')
+    except Exception as e:
+        app.logger.error(e, exc_info=True)
     finally:
         # Close connections
         conn.close()

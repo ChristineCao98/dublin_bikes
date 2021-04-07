@@ -6,8 +6,8 @@ from models.schemas import Base, CurrentWeather, StaticBike
 from config.config import MySQL, APIKeys
 
 
-def scrape(dt):
-    print("In current weather scraper!")
+def scrape(dt, app):
+    app.logger.info("Scraping current weather")
     engine = create_engine(MySQL.URI)
     Base.metadata.create_all(engine)  # Create table
     Session = sessionmaker(bind=engine)
@@ -29,8 +29,8 @@ def scrape(dt):
             response = requests.get(url)
             response.raise_for_status()
 
-            # print("Weather Request=", response.request.url)
-            # print("Weather Response=", response.content)
+            app.logger.info("Weather Request=" + str(response.request.url))
+            app.logger.info("Weather Response=" + str(response.content))
 
             if response:
                 data = response.json()
@@ -67,6 +67,6 @@ def scrape(dt):
                     session.commit()
 
     else:
-        print('Can not find stations')
+        app.logger.info("Can not find stations")
     session.close()
 
