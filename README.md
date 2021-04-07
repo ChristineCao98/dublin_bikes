@@ -7,7 +7,8 @@
 
 This Project is intended for the "COMP30830 Software Engineering" Module, taught by Dr. Aonghus Lawler.
 
-### EC2 Address: 
+### EC2 Address: http://54.173.55.247/
+### Github Repo: https://github.com/ChristineCao98/dublin_bikes.git 
 
 ## Introduction 
 - Dublin Bikes is a public bike rental scheme (operated by JCDdecaux) in Dublin's City Centre. Since its launch in 2009, Dublin Bikes has had over 2.5 million user journeys, and has recorded over 15,000 users on its busiest day.  
