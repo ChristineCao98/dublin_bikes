@@ -2,5 +2,5 @@
 .idea/
 dublin_bike.egg-info/
 .ipynb_checkpoints
-.log
-.pickle
+*.pickle
+*.log
