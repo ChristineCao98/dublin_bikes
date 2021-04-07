@@ -157,6 +157,7 @@ def get_prediction(station_id):
             return jsonify({})
     except Exception as e:
         logging.error(e, exc_info=True)
+        return jsonify({})
 
 
 
