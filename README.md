@@ -18,17 +18,17 @@ This Project is intended for the "COMP30830 Software Engineering" Module, taught
 - A marker may be clicked on directly or can be selected in the drop-down menu. 
 
 - For each marker selected the following can be seen:
-  1. The Station Number 
-  2. The Station Address
-  3. The Number of availble bikes 
-  4. The Number of free stands 
-  5. Total capacity at that station 
+ 1. The Station Number 
+ 2. The Station Address
+ 3. The Number of availble bikes 
+ 4. The Number of free stands 
+ 5. Total capacity at that station 
 
 - As well as station information (upon marker selection), our website enables you to see:
-  1. The average nunber of bikes available per hour over a 24h period. 
-  2. The average number of bikes available per day over a 1 week period
-  3. A prediction (based off historical data) of bike number availablity for the next four days, showing an hour by hour prediction.
-  4. Weather information for that day, as well as the next 5 days
+ 1. The average nunber of bikes available per hour over a 24h period. 
+ 2. The average number of bikes available per day over a 1 week period
+ 3. A prediction (based off historical data) of bike number availablity for the next four days, showing an hour by hour prediction.
+ 4. Weather information for that day, as well as the next 5 days
 
 - Our website allows you to enable location services on the map to provide users with the ability to find their closest bike station. 
 - A filter may also be applied to the map to further highlight available bikes/stands. This enables users to find desired information at a greater convenience. 
@@ -44,7 +44,7 @@ This Project is intended for the "COMP30830 Software Engineering" Module, taught
 ## User Interface 
 ![dublin_bikes](https://user-images.githubusercontent.com/71882629/113942534-d79ce780-97f8-11eb-8b64-4bc281a15911.png)
 
-#References
+# References
 1. Bike API: https://developer.jcdecaux.com/#/home
 2. Weather API: https://openweathermap.org/api
 3. Map API: https://developers.google.com/maps
