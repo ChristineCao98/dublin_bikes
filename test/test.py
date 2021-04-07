@@ -15,15 +15,13 @@ class DBUnitTests(unittest.TestCase):
         self.assertEqual(status_code, 200)
 
     def test_stations_num(self):
-        """Request and Parse The JSON response for stations,
-        Check that there are 109 stations"""
+        """Request and Parse The JSON response for stations"""
         # get_json() converts the JSON object into Python data
         response = self.app.get("/api/stations/").get_json()
-        self.assertEqual(len(response), 1) #should be 109?
+        self.assertEqual(len(response), 1)
 
     def test_station_details(self):
-        """Request and Parse the JSON response for the station details
-        Check for a station (station 12) that all the details are present"""
+        """Request and Parse the JSON response for the station details"""
         response = self.app.get("/api/stations/12").get_json()
         self.assertEqual(len(response), 1)
 
