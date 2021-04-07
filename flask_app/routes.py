@@ -1,4 +1,5 @@
 import datetime
+import os
 import pickle
 
 from flask import Flask, render_template, jsonify, request
@@ -116,10 +117,11 @@ def get_prediction(station_id):
     try:
         # load prediction model
         model = None
-        with open(app.root_path + '\\bike_prediction_model.pickle', "rb") as f:
+
+        with open(os.path.join(app.root_path, "bike_prediction_model.pickle"), "rb") as f:
             model = pickle.load(f)
 
-        app.logger.debug("pickle path:" + app.root_path + "\\bike_prediction_model.pickle")
+        app.logger.debug("pickle path:" + os.path.join(app.root_path, "bike_prediction_model.pickle"))
 
         latitude, longitude = helper.get_station_coordinate(db, station_id)
         if latitude and longitude and model:
