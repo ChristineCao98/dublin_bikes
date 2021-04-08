@@ -7,7 +7,7 @@
 
 This Project is intended for the "COMP30830 Software Engineering" Module, taught by Dr. Aonghus Lawler.
 
-### EC2 Address: http://54.173.55.247/ or http://ec2-54-173-55-247.compute-1.amazonaws.com/
+### EC2 Address: http://ec2-54-173-55-247.compute-1.amazonaws.com/
 ### Github Repo: https://github.com/ChristineCao98/dublin_bikes.git 
 
 ## Introduction 
